@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arama - Çarşamba Haber Ajansı</title>
+<meta name="description" content="Çarşamba ve Samsun'dan son dakika haberleri, yerel gündem, asayiş, ekonomi ve spor haberleri.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="ust"></div>
+<main><div class="kap">
+<div class="izgara">
+  <div id="icerik"></div>
+  <aside id="yan"></aside>
+</div>
+</div></main>
+<div id="alt"></div>
+<script src="data/haberler.js"></script>
+<script src="js/site.js"></script>
+<script>
+const q = (param("q") || "").trim();
+const kucuk = s => s.toLocaleLowerCase("tr-TR");
+const l = q ? siraliHaberler().filter(h => kucuk(h.baslik + " " + h.ozet + " " + h.icerik.join(" ")).includes(kucuk(q))) : [];
+$("#icerik").innerHTML = `<h1 class="bolum-baslik">“${esc(q)}” için ${l.length} sonuç</h1>` +
+  (l.length ? l.map(h => kart(h, "yatay")).join("") : `<p class="bos">Aramanızla eşleşen haber bulunamadı.</p>`);
+$("#yan").innerHTML = yanSutun();
+havaYukle();
+</script>
+</body>
+</html>

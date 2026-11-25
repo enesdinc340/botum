@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Çarşamba Haber Ajansı - Çarşamba ve Samsun Haberleri</title>
+<meta name="description" content="Çarşamba ve Samsun'dan son dakika haberleri, yerel gündem, asayiş, ekonomi ve spor haberleri.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="ust"></div>
+<main><div class="kap">
+<div id="manset" class="manset"></div>
+<div class="izgara">
+  <div id="icerik"></div>
+  <aside id="yan"></aside>
+</div>
+</div></main>
+<div id="alt"></div>
+<script src="data/haberler.js"></script>
+<script src="js/site.js"></script>
+<script>
+const tum = siraliHaberler();
+const mansetler = tum.filter(h => h.manset).slice(0, 10);
+const slider = mansetler.slice(0, Math.max(1, mansetler.length - 2));
+const yan = tum.filter(h => !slider.includes(h)).slice(0, 2);
+const kutu = (h, cls) => `<a href="${link(h)}" class="${cls}"><img src="${esc(h.resim)}" alt=""><div class="ust">${etiket(h.kategori).replace(/<a /, "<span ").replace("</a>", "</span>")}<${cls === "mini" ? "h3" : "h2"}>${esc(h.baslik)}</${cls === "mini" ? "h3" : "h2"}></div></a>`;
+$("#manset").innerHTML = `<div class="slider">${slider.map((h, i) => kutu(h, "slayt" + (i ? "" : " aktif"))).join("")}
+  <div class="noktalar">${slider.map((_, i) => `<button data-i="${i}" class="${i ? "" : "aktif"}">${i + 1}</button>`).join("")}</div></div>
+  <div class="manset-yan">${yan.map(h => kutu(h, "mini")).join("")}</div>`;
+let sira = 0, zaman;
+const git = (i) => {
+  const s = document.querySelectorAll(".slayt"), n = document.querySelectorAll(".noktalar button");
+  s[sira].classList.remove("aktif"); n[sira].classList.remove("aktif");
+  sira = (i + s.length) % s.length;
+  s[sira].classList.add("aktif"); n[sira].classList.add("aktif");
+};
+const oto = () => { clearInterval(zaman); zaman = setInterval(() => git(sira + 1), 5000); };
+document.querySelectorAll(".noktalar button").forEach(b => b.onmouseenter = b.onclick = () => { git(+b.dataset.i); oto(); });
+oto();
+
+let html = `<section><h2 class="bolum-baslik">Son Haberler</h2><div class="kartlar">${tum.slice(0, 6).map(h => kart(h)).join("")}</div></section>`;
+for (const k of ["yerel", "asayis", "spor", "ekonomi"]) {
+  const l = tum.filter(h => h.kategori === k).slice(0, 3);
+  if (l.length) html += `<section><h2 class="bolum-baslik"><a href="kategori.html?k=${k}">${esc(kat(k).ad)}</a></h2><div class="kartlar">${l.map(h => kart(h)).join("")}</div></section>`;
+}
+$("#icerik").innerHTML = html;
+$("#yan").innerHTML = yanSutun();
+havaYukle();
+</script>
+</body>
+</html>

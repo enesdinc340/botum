@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Haber - Çarşamba Haber Ajansı</title>
+<meta name="description" content="Çarşamba ve Samsun'dan son dakika haberleri, yerel gündem, asayiş, ekonomi ve spor haberleri.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="ust"></div>
+<main><div class="kap">
+<div class="izgara">
+  <div id="icerik"></div>
+  <aside id="yan"></aside>
+</div>
+</div></main>
+<div id="alt"></div>
+<script src="data/haberler.js"></script>
+<script src="js/site.js"></script>
+<script>
+const h = HABERLER.find(x => x.id === +param("id"));
+if (!h) {
+  $("#icerik").innerHTML = `<div class="sayfa"><h1>Haber bulunamadı</h1><p class="bos">Aradığınız haber kaldırılmış veya taşınmış olabilir.</p><a class="dugme kirmizi" href="index.html">Ana sayfaya dön</a></div>`;
+} else {
+  document.title = h.baslik + " - " + SITE.ad;
+  const url = encodeURIComponent(location.href), t = encodeURIComponent(h.baslik);
+  const ilgili = siraliHaberler().filter(x => x.kategori === h.kategori && x.id !== h.id).slice(0, 3);
+  $("#icerik").innerHTML = `<article class="haber">
+    <div class="yol"><a href="index.html">Ana Sayfa</a> › <a href="kategori.html?k=${h.kategori}">${esc(kat(h.kategori).ad)}</a></div>
+    ${etiket(h.kategori)}
+    <h1>${esc(h.baslik)}</h1>
+    <p class="spot">${esc(h.ozet)}</p>
+    <div class="meta"><span>${esc(SITE.ad)} · ${tarihYaz(h.tarih, true)}</span>
+      <span class="paylas">Paylaş:
+        <a style="background:#25d366" target="_blank" rel="noopener" href="https://wa.me/?text=${t}%20${url}">WhatsApp</a>
+        <a style="background:#1877f2" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=${url}">Facebook</a>
+        <a style="background:#000" target="_blank" rel="noopener" href="https://x.com/intent/post?text=${t}&url=${url}">X</a></span></div>
+    <figure><img src="${esc(h.resim)}" alt="${esc(h.baslik)}"></figure>
+    <div class="metin">${h.icerik.map(p => `<p>${esc(p)}</p>`).join("")}</div>
+  </article>
+  ${ilgili.length ? `<section style="margin-top:28px"><h2 class="bolum-baslik">İlgili Haberler</h2><div class="kartlar">${ilgili.map(x => kart(x)).join("")}</div></section>` : ""}`;
+}
+$("#yan").innerHTML = yanSutun(h && h.id);
+havaYukle();
+</script>
+</body>
+</html>

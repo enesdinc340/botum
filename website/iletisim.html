@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>İletişim - Çarşamba Haber Ajansı</title>
+<meta name="description" content="Çarşamba ve Samsun'dan son dakika haberleri, yerel gündem, asayiş, ekonomi ve spor haberleri.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="ust"></div>
+<main><div class="kap">
+<div class="izgara">
+  <div class="sayfa">
+    <h1>İletişim</h1>
+    <p id="bilgi"></p>
+    <h2>Bize Yazın / Haber İhbarı</h2>
+    <form class="form" id="form">
+      <input name="ad" placeholder="Adınız Soyadınız" required>
+      <input name="tel" placeholder="Telefon">
+      <select name="konu"><option>Haber İhbarı</option><option>Reklam</option><option>Öneri / Şikayet</option><option>Diğer</option></select>
+      <textarea name="mesaj" rows="6" placeholder="Mesajınız" required></textarea>
+      <button class="dugme kirmizi">WhatsApp ile Gönder</button>
+    </form>
+  </div>
+  <aside id="yan"></aside>
+</div>
+</div></main>
+<div id="alt"></div>
+<script src="data/haberler.js"></script>
+<script src="js/site.js"></script>
+<script>
+$("#bilgi").innerHTML = `<b>Adres:</b> ${esc(SITE.adres)}<br><b>Telefon:</b> ${esc(SITE.telefon)}<br><b>E-posta:</b> <a href="mailto:${esc(SITE.eposta)}">${esc(SITE.eposta)}</a>`;
+$("#form").onsubmit = e => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const m = `*${f.get("konu")}*\nAd: ${f.get("ad")}\nTel: ${f.get("tel")}\n\n${f.get("mesaj")}`;
+  window.open(`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(m)}`, "_blank");
+};
+$("#yan").innerHTML = yanSutun();
+havaYukle();
+</script>
+</body>
+</html>

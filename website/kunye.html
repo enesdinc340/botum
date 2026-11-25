@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Künye - Çarşamba Haber Ajansı</title>
+<meta name="description" content="Çarşamba ve Samsun'dan son dakika haberleri, yerel gündem, asayiş, ekonomi ve spor haberleri.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="ust"></div>
+<main><div class="kap">
+<div class="izgara">
+  <div class="sayfa">
+    <h1>Künye</h1>
+    <table class="kunye" id="kunye"></table>
+  </div>
+  <aside id="yan"></aside>
+</div>
+</div></main>
+<div id="alt"></div>
+<script src="data/haberler.js"></script>
+<script src="js/site.js"></script>
+<script>
+const satir = (a, b) => `<tr><td>${a}</td><td>${esc(b)}</td></tr>`;
+$("#kunye").innerHTML = [
+  satir("Yayın Adı", SITE.ad),
+  satir("İmtiyaz Sahibi", "Ad Soyad"),
+  satir("Genel Yayın Yönetmeni", "Ad Soyad"),
+  satir("Sorumlu Yazı İşleri Müdürü", "Ad Soyad"),
+  satir("Haber Müdürü", "Ad Soyad"),
+  satir("Yönetim Yeri", SITE.adres),
+  satir("Telefon", SITE.telefon),
+  satir("E-posta", SITE.eposta),
+  satir("Yer Sağlayıcı", "Hosting firmanızın adı")
+].join("");
+$("#yan").innerHTML = yanSutun();
+havaYukle();
+</script>
+</body>
+</html>

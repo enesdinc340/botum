@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kategori - Çarşamba Haber Ajansı</title>
+<meta name="description" content="Çarşamba ve Samsun'dan son dakika haberleri, yerel gündem, asayiş, ekonomi ve spor haberleri.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="ust"></div>
+<main><div class="kap">
+<div class="izgara">
+  <div id="icerik"></div>
+  <aside id="yan"></aside>
+</div>
+</div></main>
+<div id="alt"></div>
+<script src="data/haberler.js"></script>
+<script src="js/site.js"></script>
+<script>
+const k = param("k");
+document.title = kat(k).ad + " Haberleri - " + SITE.ad;
+const l = siraliHaberler().filter(h => h.kategori === k);
+$("#icerik").innerHTML = `<h1 class="bolum-baslik">${esc(kat(k).ad)} Haberleri</h1>` +
+  (l.length ? l.map(h => kart(h, "yatay")).join("") : `<p class="bos">Bu kategoride henüz haber yok.</p>`);
+$("#yan").innerHTML = yanSutun();
+havaYukle();
+</script>
+</body>
+</html>
